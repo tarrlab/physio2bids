@@ -45,7 +45,7 @@ class Physio:
 
     #container for fields in one physio file
     def __init__(self, filename, type, write_loc):
-        print('Creating new Physio instance for {}'.format(filename))
+        #print('Creating new Physio instance for {}'.format(filename))
         self.data = []
         self.start_time = 0
         self.sr = 0
@@ -74,6 +74,7 @@ class Physio:
 
     #write tsv file with data items one per line
     def write_tsv(self, outname):
+        #print('Writing TSV at {}'.format(os.path.join(self.write_loc, outname)))
         with open(os.path.join(self.write_loc, outname), 'wb') as csv_out:
             tsvwriter = csv.writer(csv_out, delimiter='\t')
             for x in self.data:
@@ -109,12 +110,6 @@ class DicomLoad:
             self.dcm_dict[util.ts2ms(ds.AcquisitionTime)] = bd
             bold_count += 1
         print('Loaded {} DICOMs'.format(bold_count))
-        print('DEBUG::dicom timestamps:')
-        k = self.dcm_dict.keys()
-        k.sort()
-        for key in k:
-            print key
-
 
     def get_taskname(self, timestamp):
         #check DICOMs for starting timestamp matching given, return task name
@@ -123,7 +118,7 @@ class DicomLoad:
         if len(k) == 1:
             return (self.dcm_dict[k[0]], k[0])
         for dcm in range(1,len(k)):
-            print('Checking timestamp {} against {}'.format(k[dcm],timestamp))
+            #print('Checking timestamp {} against {}'.format(k[dcm],timestamp))
             if k[dcm] >= timestamp and k[dcm-1] < timestamp:
                 return (self.dcm_dict[k[dcm]], k[dcm])
             if dcm-1 == 0 and k[dcm-1] > timestamp:
@@ -140,6 +135,7 @@ class PhysioLoad:
 
     def run(self):
         p = os.listdir(self.directory)
+        print "Converting physio...\t\t",
         for e in p:
             type = ""
             if '.ext' in e:
@@ -160,8 +156,9 @@ class PhysioLoad:
             dcm_start = resp[1]
             tname = self.formatter.bidsify(name, type, 'tsv')
             jname = self.formatter.bidsify(name, type, 'json')
-            phys.write_tsv(os.path.join(self.directory, tname))
-            phys.write_json(os.path.join(self.directory, jname), dcm_start)
+            phys.write_tsv(tname)
+            phys.write_json(jname, dcm_start)
+        print('\t\t\tDONE\n')
 
 class BIDS_Formatter:
 
@@ -214,13 +211,14 @@ if __name__== "__main__":
     #check for specified output directory; create if it doesn't exist, or default to physio folder
     write_loc = ''
     if len(sys.argv[1]) == 0:
+        print('No output folder specified - will use physio directory')
         write_loc = physio_dir
     else:
         write_loc = sys.argv[1]
+        print('Using output folder {}'.format(os.path.join(os.getcwd(), write_loc)))
         if not os.path.exists(write_loc):
             os.mkdir(write_loc)
 
     dcm = DicomLoad(dcm_dir)
     phys = PhysioLoad(physio_dir, dcm, write_loc)
     phys.run()
-
