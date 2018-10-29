@@ -1,5 +1,6 @@
 import csv
 import os
+import sys
 import pydicom
 import json
 from Tkinter import *
@@ -210,6 +211,16 @@ if __name__== "__main__":
     dcm_dir = tkFileDialog.askdirectory(title='Select DICOM directory')
     physio_dir = tkFileDialog.askdirectory(title='Select Physio directory')
 
+    #check for specified output directory; create if it doesn't exist, or default to physio folder
+    write_loc = ''
+    if len(sys.argv[1]) == 0:
+        write_loc = physio_dir
+    else:
+        write_loc = sys.argv[1]
+        if not os.path.exists(write_loc):
+            os.mkdir(write_loc)
+
     dcm = DicomLoad(dcm_dir)
-    phys = PhysioLoad(physio_dir, dcm)
+    phys = PhysioLoad(physio_dir, dcm, write_loc)
     phys.run()
+
