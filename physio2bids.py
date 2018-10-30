@@ -186,7 +186,9 @@ class BIDS_Formatter:
         base = fname.split('/')[-1]
         sub = base[base.index('CSI'):base.index('CSI')+4]
         sess = base[base.index('Sess'):base.index('Sess')+7]
-        run = base[base.index('Run'):base.index('Run')+6]
+        run = ''
+        if 'Run' in base:
+            run = base[base.index('Run'):base.index('Run')+6]
         sub = 'sub-' + sub
         sess = 'ses-' + sess.split('-')[1].split('_')[0].zfill(2)
         run = 'run-' + run.split('-')[1].split('_')[0].zfill(2)
