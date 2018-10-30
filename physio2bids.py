@@ -191,7 +191,8 @@ class BIDS_Formatter:
             run = base[base.index('Run'):base.index('Run')+6]
         sub = 'sub-' + sub
         sess = 'ses-' + sess.split('-')[1].split('_')[0].zfill(2)
-        run = 'run-' + run.split('-')[1].split('_')[0].zfill(2)
+        if len(run) > 0:
+            run = 'run-' + run.split('-')[1].split('_')[0].zfill(2)
         task = ''
         if 'SceneLocal' in base:
             task = 'task-localizer'
