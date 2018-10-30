@@ -6,6 +6,7 @@ import json
 from Tkinter import *
 import Tkinter, tkFileDialog
 import re
+import argparse
 
 #Author - Austin Marcus
 #TarrLab @ CMU October 2018
@@ -192,6 +193,24 @@ class BIDS_Formatter:
 
 if __name__== "__main__":
 
+    #parse args
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--dicom")
+    parser.add_argument("-p", "--physio")
+    parser.add_argument("-o", "--output")
+    args = parser.parse_args()
+
+    #check that DICOM and physio dirs specified
+    if not args.dicom:
+        print('Error: you need to specify a DICOM directory.')
+        sys.exit()
+    if not args.physio:
+        print('Error: you need to specify a Physio directory.')
+        sys.exit()
+
+    dcm_dir = args.dicom
+    physio_dir = args.physio
+
     print('\n')
     print('------------------------------')
     print('---Physio -> BIDS converter---')
@@ -202,19 +221,13 @@ if __name__== "__main__":
     print('\n')
     print('Select directories:')
 
-    dcm_dir = ''
-    physio_dir = ''
-
-    dcm_dir = tkFileDialog.askdirectory(title='Select DICOM directory')
-    physio_dir = tkFileDialog.askdirectory(title='Select Physio directory')
-
     #check for specified output directory; create if it doesn't exist, or default to physio folder
     write_loc = ''
-    if len(sys.argv[1]) == 0:
+    if not args.output:
         print('No output folder specified - will use physio directory')
         write_loc = physio_dir
     else:
-        write_loc = sys.argv[1]
+        write_loc = args.output
         print('Using output folder {}'.format(os.path.join(os.getcwd(), write_loc)))
         if not os.path.exists(write_loc):
             os.mkdir(write_loc)
