@@ -1,4 +1,5 @@
 import csv
+import gzip
 import os
 import sys
 import pydicom
@@ -53,9 +54,14 @@ class Physio:
         self.type = type
         self.write_loc = write_loc
         self.typestrings = {'resp' : 'RESP', 'puls' : 'PULS', 'trigger' : 'EXT'}
-        with open(filename, 'rb') as infile:
-            filestring = infile.read()
-            self._parse_physio(filestring)
+        if filename.split('.')[-1] == '.gz':
+            with gzip.open(filename, 'rb') as infile:
+                filestring = infile.read()
+                self.parse_physio(filestring)
+        else:
+            with open(filename, 'rb') as infile:
+                filestring = infile.read()
+                self._parse_physio(filestring)
 
     def _parse_physio(self, filestring):
         #do the heavy lifting here
