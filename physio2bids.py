@@ -8,6 +8,7 @@ from Tkinter import *
 import Tkinter, tkFileDialog
 import re
 import argparse
+import shutil
 
 #Author - Austin Marcus
 #TarrLab @ CMU October 2018
@@ -54,7 +55,7 @@ class Physio:
         self.type = type
         self.write_loc = write_loc
         self.typestrings = {'resp' : 'RESP', 'puls' : 'PULS', 'trigger' : 'EXT'}
-        if filename.split('.')[-1] == '.gz':
+        if filename.split('.')[-1] == 'gz':
             with gzip.open(filename, 'rb') as infile:
                 filestring = infile.read()
                 self.parse_physio(filestring)
@@ -90,6 +91,13 @@ class Physio:
                     x = [float(x)]
                 tsvwriter.writerow(x)
             csv_out.close()
+        #gzip the newly-created TSV
+        with open(os.path.join(self.write_loc, outname), 'rb') as f_in:
+            with open(os.path.join(self.write_loc, outname) + '.gz', 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        #remove original
+        os.remove(os.path.join(self.write_loc, outname))
+
 
     #write json with column name, sampling rate, and start time
     def write_json(self, outname, dcm_start):
