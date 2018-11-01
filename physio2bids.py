@@ -115,9 +115,10 @@ class Physio:
         #remove original
         os.remove(os.path.join(self.write_loc, outname))
         #solve double-underscore naming problem
-        cmd = 'rename s/__/_/ *'
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
-        out,err = process.communicate()
+        if '__' in outname:
+            cmd = 'rename s/__/_/ {}'.format(os.path.join(self.write_loc, outname))
+            process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
+            out,err = process.communicate()
 
 
     #write json with column name, sampling rate, and start time
@@ -127,9 +128,10 @@ class Physio:
             json.dump(data_out, fp)
             fp.close()
         #solve double-underscore naming problem
-        cmd = 'rename s/__/_/ *'
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
-        out,err = process.communicate()
+        if '__' in outname:
+            cmd = 'rename s/__/_/ {}'.format(os.path.join(self.write_loc, outname))
+            process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
+            out,err = process.communicate()
 
 class DicomLoad:
 
