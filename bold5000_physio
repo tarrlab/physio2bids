@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for sub in {1..3}; do
+    for ses in $(seq -f "%02g" 1 15); do
+        python physio2bids.py -d "/media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI"$sub"/CSI"$sub"_sess"$ses"/" -p "/media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI"$sub"/CSI"$sub"_sess"$ses"/physio" -o "/media/tarrlab/scenedata2/5000_BIDS/sub-CSI"$sub"/ses-"$ses"/func" -l "/home/tarrlab/Documents/physio2bids/logs/BOLD5000-master-conversion-log.txt"
+    done
+done
+
+for ses in $(seq -f "%02g" 1 9); do
+    python physio2bids.py -d "/media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI4/CSI4_sess"$ses"/" -p "/media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI4/CSI4_sess"$ses"/physio" -o "/media/tarrlab/scenedata2/5000_BIDS/sub-CSI4/ses-"$ses"/func" -l "/home/tarrlab/Documents/physio2bids/logs/BOLD5000-master-conversion-log.txt"
+done
