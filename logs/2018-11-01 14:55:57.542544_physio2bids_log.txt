@@ -1,6 +1,0 @@
-PHYSIO2BIDS -- 2018-11-01 14:55:57.562622
--------------------------------------------------
-DICOM directory: /media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI4/CSI4_sess02/	Physio directory: /media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI4/CSI4_sess02/physio	Output directory: /media/tarrlab/scenedata2/5000_BIDS/sub-CSI4/ses-02/func
--------------------------------------------------
-Conversion target: Physio_log_20171114_163710_9fee6956-43b1-476a-9be8-3a5ab008954e.puls	TIMESTAMP MISMATCH ERROR
-Conversion target: Physio_log_20171115_123423_ffc6a6d7-2ee2-4ea4-82a3-f3feea11ad0c.ext	MATCHED TO sub-CSI4_ses-02_task-5000scenes_run-01_recording-trigger_physio	
