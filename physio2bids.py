@@ -118,7 +118,7 @@ class Physio:
         os.remove(os.path.join(self.write_loc, outname))
         #solve double-underscore naming problem
         if '__' in outname:
-            cmd = 'rename s/__/_/ {}'.format(os.path.join(self.write_loc, outname + '.gz'))
+            cmd = 'rename -f s/__/_/ {}'.format(os.path.join(self.write_loc, outname + '.gz'))
             process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
             out,err = process.communicate()
 
@@ -131,7 +131,7 @@ class Physio:
             fp.close()
         #solve double-underscore naming problem
         if '__' in outname:
-            cmd = 'rename s/__/_/ {}'.format(os.path.join(self.write_loc, outname))
+            cmd = 'rename -f s/__/_/ {}'.format(os.path.join(self.write_loc, outname))
             process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
             out,err = process.communicate()
 
