@@ -73,9 +73,11 @@ class Physio:
         d = filestring.split()
         sr_str = self.typestrings[self.type] + '_SAMPLES_PER_SECOND'
         if sr_str not in d:
-            log.write('PHYSIO FILE MISSING SR TAG\n')
-            self.corrupt = -2
-            return
+            log.write('PHYSIO FILE MISSING SR TAG - INTERPOLATING\n')
+            if self.type == 'resp' or self.type == 'pulse':
+                self.sr = 50
+            elif self.type == 'trigger':
+                self.sr = 100
         else:
             self.sr = d[d.index(sr_str) + 2]
         if 'LogStartMDHTime:' not in d:
