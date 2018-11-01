@@ -1,0 +1,34 @@
+PHYSIO2BIDS -- 2018-11-01 14:55:12.050483
+-------------------------------------------------
+DICOM directory: /media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI1/CSI1_sess04/	Physio directory: /media/tarrlab/scenedata/5000Scenes/5000Scenes_fMRI_raw/CSI1/CSI1_sess04/physio	Output directory: /media/tarrlab/scenedata2/5000_BIDS/sub-CSI1/ses-04/func
+-------------------------------------------------
+Conversion target: Physio_log_20171109_165253_3ad4c245-89b6-4252-a190-12210e2b291a.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-07_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_164434_6795e32a-9db1-403b-8ed7-fcdde87c57eb.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-06_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_161721_d5f00e36-381a-49d3-9c62-2b2565c43dc6.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-03_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_170802_6df85d6c-5f3d-4225-b72f-847e2caae7bc.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-09_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_171527_c0e274c0-ff64-404a-b911-0ca58591a8a5.ext	MATCHED TO sub-CSI1_ses-04_task-localizer__recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_161721_d5f00e36-381a-49d3-9c62-2b2565c43dc6.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-03_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_160924_b4ede5c8-020d-495e-883c-045cda1e0fc3.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-02_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_160135_4ba6f366-a0d3-4018-a61f-2e3a7d000ca3.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-01_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_160924_b4ede5c8-020d-495e-883c-045cda1e0fc3.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-02_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_162449_27613c8e-42d1-4772-8387-01379d3bf9a1.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-04_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_170802_6df85d6c-5f3d-4225-b72f-847e2caae7bc.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-09_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_160135_4ba6f366-a0d3-4018-a61f-2e3a7d000ca3.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-01_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_164434_6795e32a-9db1-403b-8ed7-fcdde87c57eb.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-06_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_165253_3ad4c245-89b6-4252-a190-12210e2b291a.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-07_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_165253_3ad4c245-89b6-4252-a190-12210e2b291a.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-07_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_170031_2b9bfe0c-b269-4a57-b870-8a3bf997bb21.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-08_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_170031_2b9bfe0c-b269-4a57-b870-8a3bf997bb21.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-08_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_161721_d5f00e36-381a-49d3-9c62-2b2565c43dc6.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-03_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_170802_6df85d6c-5f3d-4225-b72f-847e2caae7bc.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-09_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_163215_26816446-bbaf-411b-8bae-4bc1506f5d10.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-05_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_171527_c0e274c0-ff64-404a-b911-0ca58591a8a5.resp	MATCHED TO sub-CSI1_ses-04_task-localizer__recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_162449_27613c8e-42d1-4772-8387-01379d3bf9a1.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-04_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_164434_6795e32a-9db1-403b-8ed7-fcdde87c57eb.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-06_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_171527_c0e274c0-ff64-404a-b911-0ca58591a8a5.puls	MATCHED TO sub-CSI1_ses-04_task-localizer__recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_170031_2b9bfe0c-b269-4a57-b870-8a3bf997bb21.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-08_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_160135_4ba6f366-a0d3-4018-a61f-2e3a7d000ca3.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-01_recording-cardiac_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_162449_27613c8e-42d1-4772-8387-01379d3bf9a1.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-04_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_160924_b4ede5c8-020d-495e-883c-045cda1e0fc3.resp	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-02_recording-respiratory_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_163215_26816446-bbaf-411b-8bae-4bc1506f5d10.ext	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-05_recording-trigger_physio	CONVERTED FILES WRITTEN
+Conversion target: Physio_log_20171109_163215_26816446-bbaf-411b-8bae-4bc1506f5d10.puls	MATCHED TO sub-CSI1_ses-04_task-5000scenes_run-05_recording-cardiac_physio	CONVERTED FILES WRITTEN
