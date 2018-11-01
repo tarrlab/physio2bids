@@ -9,6 +9,7 @@ import Tkinter, tkFileDialog
 import re
 import argparse
 import shutil
+import datetime
 
 #Author - Austin Marcus
 #TarrLab @ CMU October 2018
@@ -47,13 +48,15 @@ class Util:
 class Physio:
 
     #container for fields in one physio file
-    def __init__(self, filename, type, write_loc):
+    def __init__(self, filename, type, write_loc, log):
         #print('Creating new Physio instance for {}'.format(filename))
         self.data = []
         self.start_time = 0
         self.sr = 0
         self.type = type
         self.write_loc = write_loc
+        self.log = log
+        self.corrupt = 0
         self.typestrings = {'resp' : 'RESP', 'puls' : 'PULS', 'trigger' : 'EXT'}
         if filename.split('.')[-1] == 'gz':
             with gzip.open(filename, 'rb') as infile:
@@ -68,8 +71,18 @@ class Physio:
         #do the heavy lifting here
         d = filestring.split()
         sr_str = self.typestrings[self.type] + '_SAMPLES_PER_SECOND'
-        self.sr = d[d.index(sr_str) + 2]
-        self.start_time = float(d[d.index('LogStartMDHTime:') + 1])
+        if sr_str not in d:
+            log.write('PHYSIO FILE MISSING SR TAG\n')
+            self.corrupt = -2
+            return
+        else:
+            self.sr = d[d.index(sr_str) + 2]
+        if 'LogStartMDHTime:' not in d:
+            log.write('PHYSIO FILE MISSING START TIMESTAMP\n')
+            self.corrupt = -1
+            return
+        else:
+            self.start_time = float(d[d.index('LogStartMDHTime:') + 1])
         d_start = d.index(self.typestrings[self.type] + '_SAMPLE_INTERVAL') + 2
         d_stop = d.index('FINISHED') - 1
         self.data = d[d_start:d_stop]
@@ -78,7 +91,10 @@ class Physio:
         return self.data
 
     def get_start_time(self):
-        return self.start_time
+        if self.corrupt < 0:
+            return self.corrupt
+        else:
+            return self.start_time
 
     #write tsv file with data items one per line
     def write_tsv(self, outname):
@@ -127,6 +143,8 @@ class DicomLoad:
         print('Loaded {} DICOMs'.format(bold_count))
 
     def get_taskname(self, timestamp):
+        if timestamp < 0:
+            return ("ERROR", timestamp)
         #check DICOMs for starting timestamp matching given, return task name
         k = self.dcm_dict.keys()
         k.sort()
@@ -138,20 +156,23 @@ class DicomLoad:
                 return (self.dcm_dict[k[dcm]], k[dcm])
             if dcm-1 == 0 and k[dcm-1] > timestamp:
                 return (self.dcm_dict[k[dcm-1]], k[dcm-1])
-        return ("ERROR", 0)
+        return ("ERROR", -3)
 
 class PhysioLoad:
 
-    def __init__(self, directory, dcm_load, write_loc):
+    def __init__(self, directory, dcm_load, write_loc, log):
         self.directory = directory
         self.dcm_load = dcm_load
         self.formatter = BIDS_Formatter()
         self.write_loc = write_loc
+        self.log = log
 
     def run(self):
         p = os.listdir(self.directory)
         print "Converting physio...\t\t",
         for e in p:
+            if 'Physio' in e:
+                self.log.write('Conversion target: {}\t'.format(e))
             type = ""
             if '.ext' in e:
                 type = 'trigger'
@@ -162,17 +183,21 @@ class PhysioLoad:
             else:
                 #not valid physio file - skip
                 continue
-            phys = Physio(os.path.join(self.directory, e), type, self.write_loc)
+            phys = Physio(os.path.join(self.directory, e), type, self.write_loc, self.log)
             resp = dcm.get_taskname(phys.get_start_time())
             if resp[0] == "ERROR":
                 print('ERROR RETRIEVING TASK NAME FROM DICOM - EXITING')
-                return
+                if resp[1] == -3:
+                    log.write('TIMESTAMP MISMATCH ERROR\n')
+                continue
             name = resp[0]
             dcm_start = resp[1]
             tname = self.formatter.bidsify(name, type, 'tsv')
             jname = self.formatter.bidsify(name, type, 'json')
+            log.write('MATCHED TO {}\t'.format(tname.split('.')[0]))
             phys.write_tsv(tname)
             phys.write_json(jname, dcm_start)
+            log.write('CONVERTED FILES WRITTEN\n')
         print('\t\t\tDONE\n')
 
 class BIDS_Formatter:
@@ -215,6 +240,7 @@ if __name__== "__main__":
     parser.add_argument("-d", "--dicom")
     parser.add_argument("-p", "--physio")
     parser.add_argument("-o", "--output")
+    parser.add_argument("-l", "--log")
     args = parser.parse_args()
 
     #check that DICOM and physio dirs specified
@@ -249,6 +275,20 @@ if __name__== "__main__":
         if not os.path.exists(write_loc):
             os.mkdir(write_loc)
 
+    logfile = os.path.join(os.getcwd(), 'logs', '{}_physio2bids_log.txt'.format(datetime.datetime.now()))
+    if args.log:
+        logfile = args.log
+    else:
+        if not os.path.exists(os.path.join(os.getcwd(), 'logs')):
+            os.mkdir('logs')
+
     dcm = DicomLoad(dcm_dir)
-    phys = PhysioLoad(physio_dir, dcm, write_loc)
-    phys.run()
+    with open(logfile, 'wb') as log:
+        log.write('PHYSIO2BIDS -- {}\n'.format(datetime.datetime.now()))
+        log.write('-------------------------------------------------\n')
+        log.write('DICOM directory: {}\t'.format(dcm_dir))
+        log.write('Physio directory: {}\t'.format(physio_dir))
+        log.write('Output directory: {}\n'.format(write_loc))
+        log.write('-------------------------------------------------\n')
+        phys = PhysioLoad(physio_dir, dcm, write_loc, log)
+        phys.run()
