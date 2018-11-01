@@ -171,8 +171,6 @@ class PhysioLoad:
         p = os.listdir(self.directory)
         print "Converting physio...\t\t",
         for e in p:
-            if 'Physio' in e:
-                self.log.write('Conversion target: {}\t'.format(e))
             type = ""
             if '.ext' in e:
                 type = 'trigger'
@@ -183,6 +181,7 @@ class PhysioLoad:
             else:
                 #not valid physio file - skip
                 continue
+            self.log.write('Conversion target: {}\t'.format(e))
             phys = Physio(os.path.join(self.directory, e), type, self.write_loc, self.log)
             resp = dcm.get_taskname(phys.get_start_time())
             if resp[0] == "ERROR":
