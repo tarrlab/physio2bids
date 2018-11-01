@@ -10,6 +10,7 @@ import re
 import argparse
 import shutil
 import datetime
+import subprocess
 
 #Author - Austin Marcus
 #TarrLab @ CMU October 2018
@@ -113,6 +114,10 @@ class Physio:
                 shutil.copyfileobj(f_in, f_out)
         #remove original
         os.remove(os.path.join(self.write_loc, outname))
+        #solve double-underscore naming problem
+        cmd = 'rename s/__/_/ *'
+        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
+        out,err = process.communicate()
 
 
     #write json with column name, sampling rate, and start time
@@ -121,6 +126,10 @@ class Physio:
         with open(os.path.join(self.write_loc, outname), 'wb') as fp:
             json.dump(data_out, fp)
             fp.close()
+        #solve double-underscore naming problem
+        cmd = 'rename s/__/_/ *'
+        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
+        out,err = process.communicate()
 
 class DicomLoad:
 
