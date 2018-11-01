@@ -186,7 +186,7 @@ class PhysioLoad:
             phys = Physio(os.path.join(self.directory, e), type, self.write_loc, self.log)
             resp = dcm.get_taskname(phys.get_start_time())
             if resp[0] == "ERROR":
-                print('ERROR RETRIEVING TASK NAME FROM DICOM - EXITING')
+                print('ERROR RETRIEVING TASK NAME FROM DICOM - SKIPPING')
                 if resp[1] == -3:
                     log.write('TIMESTAMP MISMATCH ERROR\n')
                 continue
@@ -283,7 +283,7 @@ if __name__== "__main__":
             os.mkdir('logs')
 
     dcm = DicomLoad(dcm_dir)
-    with open(logfile, 'wb') as log:
+    with open(logfile, 'ab') as log:
         log.write('PHYSIO2BIDS -- {}\n'.format(datetime.datetime.now()))
         log.write('-------------------------------------------------\n')
         log.write('DICOM directory: {}\t'.format(dcm_dir))
@@ -292,3 +292,4 @@ if __name__== "__main__":
         log.write('-------------------------------------------------\n')
         phys = PhysioLoad(physio_dir, dcm, write_loc, log)
         phys.run()
+        log.write('-------------------------------------------------\n')
