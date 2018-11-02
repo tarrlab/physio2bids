@@ -1,19 +1,20 @@
+#!/usr/bin/python
+
+#Author - Austin Marcus
+#TarrLab @ CMU October 2018
+#aimarcus@andrew.cmu.edu
+
 import csv
 import gzip
 import os
 import sys
 import pydicom
 import json
-from Tkinter import *
-import Tkinter, tkFileDialog
 import re
 import argparse
 import shutil
 import datetime
 import subprocess
-
-#Author - Austin Marcus
-#TarrLab @ CMU October 2018
 
 '''
 Load in DICOMs from given folder
@@ -21,7 +22,7 @@ For folder of physio data:
     Per file:
         Create Physio object (read in, get data & info fields)
         Look up timestamp, cross-ref with DICOMs to find task name
-        Write out physio to TSV [in BIDS format] in same location
+        Write out physio to TSV [in BIDS format] in specified location
 '''
 
 class Util:
@@ -112,7 +113,7 @@ class Physio:
             csv_out.close()
         #gzip the newly-created TSV
         with open(os.path.join(self.write_loc, outname), 'rb') as f_in:
-            with open(os.path.join(self.write_loc, outname) + '.gz', 'wb') as f_out:
+            with gzip.open(os.path.join(self.write_loc, outname) + '.gz', 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
         #remove original
         os.remove(os.path.join(self.write_loc, outname))
@@ -183,6 +184,7 @@ class PhysioLoad:
     def run(self):
         p = os.listdir(self.directory)
         print "Converting physio...\t\t",
+        #convert each file in physio dir
         for e in p:
             type = ""
             if '.ext' in e:
@@ -196,6 +198,7 @@ class PhysioLoad:
                 continue
             self.log.write('Conversion target: {}\t'.format(e))
             phys = Physio(os.path.join(self.directory, e), type, self.write_loc, self.log)
+            #get the taskname given this physio file's start timestamp
             resp = dcm.get_taskname(phys.get_start_time())
             if resp[0] == "ERROR":
                 print('ERROR RETRIEVING TASK NAME FROM DICOM - SKIPPING')
@@ -221,6 +224,8 @@ class BIDS_Formatter:
         #given a task name, bidsify it and return it (plus requested extension)
         #sub-X_ses-X_task-X_run-X_recording-X_physio
         base = fname.split('/')[-1]
+
+        #@todo: replace with general-case (maybe require user to enter subject ID stem)
         sub = base[base.index('CSI'):base.index('CSI')+4]
         sess = base[base.index('Sess'):base.index('Sess')+7]
         run = ''
@@ -230,11 +235,18 @@ class BIDS_Formatter:
         sess = 'ses-' + sess.split('-')[1].split('_')[0].zfill(2)
         if len(run) > 0:
             run = 'run-' + run.split('-')[1].split('_')[0].zfill(2)
+
+        #@todo: replace this with a dictionary search for identifiers
+        #user should be prompted to enter task indentifiers as found in DICOM folder names,
+        #and the desired corresponding identifier for BIDS-formatted output files (task-X)
+        #or, user can specify a config file (JSON) with all DICOM-BIDS task ID pairs
         task = ''
         if 'SceneLocal' in base:
             task = 'task-localizer'
         else:
             task = 'task-5000scenes'
+
+        #check recording type
         rec = ''
         if 'puls' in type:
             rec = 'recording-cardiac'
@@ -242,17 +254,20 @@ class BIDS_Formatter:
             rec = 'recording-respiratory'
         elif 'trigger' in type:
             rec = 'recording-trigger'
+
+        #put together
         s = '_'
-        return s.join([sub, sess, task, run, rec]) + '_physio.' + extension
+        ret = s.join([sub, sess, task, run, rec]) + '_physio.' + extension
+        return ret.replace('__', '_')
 
 if __name__== "__main__":
 
     #parse args
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dicom")
-    parser.add_argument("-p", "--physio")
-    parser.add_argument("-o", "--output")
-    parser.add_argument("-l", "--log")
+    parser.add_argument("-d", "--dicom", help="DICOM directory")
+    parser.add_argument("-p", "--physio", help="Physio directory (must be from same session as DICOM directory)")
+    parser.add_argument("-o", "--output", help="Output folder (default = physio directory)")
+    parser.add_argument("-l", "--log", help="Logfile name")
     args = parser.parse_args()
 
     #check that DICOM and physio dirs specified
@@ -287,6 +302,7 @@ if __name__== "__main__":
         if not os.path.exists(write_loc):
             os.mkdir(write_loc)
 
+    #set up logfile
     logfile = os.path.join(os.getcwd(), 'logs', '{}_physio2bids_log.txt'.format(datetime.datetime.now()))
     if args.log:
         logfile = args.log
@@ -294,6 +310,7 @@ if __name__== "__main__":
         if not os.path.exists(os.path.join(os.getcwd(), 'logs')):
             os.mkdir('logs')
 
+    #start - open logfile and start running
     dcm = DicomLoad(dcm_dir)
     with open(logfile, 'ab') as log:
         log.write('PHYSIO2BIDS -- {}\n'.format(datetime.datetime.now()))
