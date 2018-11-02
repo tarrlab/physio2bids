@@ -315,9 +315,9 @@ if __name__== "__main__":
     with open(logfile, 'ab') as log:
         log.write('PHYSIO2BIDS -- {}\n'.format(datetime.datetime.now()))
         log.write('-------------------------------------------------\n')
-        log.write('DICOM directory: {}\t'.format(dcm_dir))
-        log.write('Physio directory: {}\t'.format(physio_dir))
-        log.write('Output directory: {}\n'.format(write_loc))
+        log.write('DICOM directory: {}\t'.format(os.path.abspath(dcm_dir)))
+        log.write('Physio directory: {}\t'.format(os.path.abspath(physio_dir)))
+        log.write('Output directory: {}\n'.format(os.path.abspath(write_loc)))
         log.write('-------------------------------------------------\n')
         phys = PhysioLoad(physio_dir, dcm, write_loc, log)
         phys.run()
